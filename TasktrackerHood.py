@@ -3,24 +3,12 @@ import json
 import shelve
 import os
 
-# Read the json
-def read_json():
-    with open(file='task.json', mode='r', encoding='utf-8') as j:
-        after_read = json.load(j)
-        return after_read
-        
-# Add a task to existing task list[Dictionary]   
-def Updatelist(new_task):
-    saved_tasks = read_json()
-    saved_tasks.append(new_task)
-    return saved_tasks
 
-# Write the json 
-def write_json(_task_):
-    with open(file="task.json", mode='w', encoding= 'utf-8') as t:
-        json.dump(_task_,t,indent=4)
+# Global variables
+time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# Assignment of task_ids, never repeat an id. 
+
+# Assign of task_ids to each task, never repeat an id. 
 def assign_id():
     with shelve.open('_id_') as db:
         _id = db.get('_id_',-1)
@@ -30,30 +18,42 @@ def assign_id():
 
     """ To restart the memory, just delete the file
     what happpens:
-        starts from -2: Hence the generated id starts from 0.
+        starts from -1: Hence the generated id starts from 0.
     """
-    
-variable_id = assign_id()
-    
-# To access any task,  provide id then return the task dictionary
-# Reasons to access the task ---> update description, delete task, task details such as done, not started plus in progress.
-# Return the index of the task dictionary needed, given the task id.
 
-# its a list of lists
-def return_index(id_input):
-    saved_tasks = read_json()
-    for index,dict in enumerate(saved_tasks):
-        id_found = next(iter(dict))
-        if id_found == id_input:
+# Read the json file, Load Data to Variable to contain the list of tasks (in form of dictionaries). 
+def read_json():
+    with open(file='task.json', mode='r', encoding='utf-8') as L:
+        read_jsonData = json.load(L)
+        return read_jsonData
+        
+# Add new task to the latest version of the list of tasks (in form of dictionaries).
+def Add_to_list(new_task):
+    nes = read_json()
+    nes.extend(new_task)
+    return nes
+
+# Write the latest version of the list of tasks (in form of dictionaries) to a json file.
+def write_json(latest_list):
+    with open(file="task.json", mode='w', encoding= 'utf-8') as t:
+        json.dump(latest_list,t,indent=4)
+
+# Provide the index of the task dictionary required for other functions
+def return_index(id_provided):
+    for index, task_dict in enumerate(read_json()):
+        id_found = next(iter(task_dict))
+        if id_found == id_provided:
             return index
-
-# Global variables
-time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return 'Bro, the ID you provided was not found! :('
 
 # Object for Task 
 class Task:
-    def __init__(self,task_placeholder,_id_= variable_id,status = 'Not started', 
-         time_of_creation = time_now, time_of_update = None):
+    def __init__(self,
+                 task_placeholder,
+                 _id_=assign_id(),
+                 status = 'Not started',
+                 time_of_creation = time_now,
+                 time_of_update = None ):
         self.task_id = _id_
         self.task_description = task_placeholder
         self.status = status
@@ -73,33 +73,36 @@ class Task:
                 }
             }
         ]
-    # Add a task to the list of task dictioanries.
-    def Add_task(self):
-        added_task = self.construct_task()      
-        if not os.path.exists('task.json'):
-            write_json(_task_=added_task)
-        else:
-            entire_list = Updatelist(new_task=added_task)
-            write_json(_task_= entire_list)
-        print(added_task)
-        print(f"TASK SUCCESSFULLY SAVED AS ID:{self.task_id}")
         
-    # Update task description of specific task in the list of task dictionaries.
+    # Add a task to the list of task dictioanries.
+    def Add_task(self):     
+        if not os.path.exists('task.json'):
+            write_json(self.construct_task())
+        else:
+            write_json(Add_to_list(self.construct_task()))
+        print(self.construct_task())
+        print(f"TASK SUCCESSFULLY SAVED AS ID:{self.task_id}")
+    
+    
+# Update task description of specific task in the list of task dictionaries.
 def update_task_description(task_id,updated_description):
-    saved_tasks = read_json()
-    _ID_= next(iter(saved_tasks[return_index(id_input=task_id)]))
-    nested_dictionary = saved_tasks[return_index(id_input=task_id)].get(_ID_)
-    #short_description = nested_dictionary['task description']
-    short_description = updated_description
-    status_of_task = nested_dictionary['status']
-    creatitontime_of_task = nested_dictionary['create time']
-    # updatetime_of_task = nested_dictionary['update time']
-    Updated_task = Task(_id_=_ID_,task_placeholder=short_description,status=status_of_task,
-                        time_of_creation=creatitontime_of_task,time_of_update= time_now).construct_task()
-    saved_tasks[return_index(id_input=task_id)] = Updated_task
-    write_json(_task_=saved_tasks)
-    print(Updated_task)
+    _ID_= next(iter(read_json()[return_index(task_id)]))
+    nested_dictionary = read_json()[return_index(task_id)].get(_ID_)
+    _taskObject = Task(_id_=_ID_,
+                        task_placeholder=updated_description,
+                        status=nested_dictionary['status'],
+                        time_of_creation=nested_dictionary['create time'],
+                        time_of_update= time_now)
+    updated_task = _taskObject.construct_task()
+    task_history = read_json()
+    task_history[return_index(task_id)] = updated_task
+    write_json(task_history)
+    print(updated_task)
 
+    
+    '''updatetime_of_task = nested_dictionary['update time']
+       short_description = nested_dictionary['task description']'''
+    
     
 def delete_task(number):
     pass

@@ -1,3 +1,5 @@
+# CLI structure to handle user inputs.
+
 import argparse
 from TasktrackerHood import Task,update_task_description
 
@@ -11,7 +13,7 @@ def _update(args):
 '''def _delete(args):
     task_object.delete_task(task_num=args._id_delete)'''
 
-# Parse     
+# Parser    
 parser = argparse.ArgumentParser(prog='Task-Tracker-CLI',
 description="A simple command line interface (CLI) to track what you need to do, what you have done, and what you are currently working on")
 sub_parser = parser.add_subparsers(dest='command', required=True)
