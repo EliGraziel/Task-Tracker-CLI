@@ -1,7 +1,7 @@
 # CLI structure to handle user inputs.
 
 import argparse
-from TasktrackerHood import Task,update_task_description
+from TasktrackerHood import Task,update_task_description,delete_task
 
 def _task(args):
     Object = Task(task_placeholder=args.task_description)
@@ -10,8 +10,8 @@ def _task(args):
 def _update(args):
     update_task_description(task_id=args._id_update,updated_description=args.updated_description)
     
-'''def _delete(args):
-    task_object.delete_task(task_num=args._id_delete)'''
+def _delete(args):
+    delete_task(task_num=args._id_delete)
 
 # Parser    
 parser = argparse.ArgumentParser(prog='Task-Tracker-CLI',
@@ -31,11 +31,11 @@ update_praser.add_argument('_id_update', type= str,help="Provide task_id & the t
 # The default function to call
 update_praser.set_defaults(func=_update)
 
-''''# Sub_parser Delete Command
+#Sub_parser Delete Command
 delete_praser = sub_parser.add_parser("delete",help="Deletes Task Description to Task tracker memory")
 delete_praser.add_argument('_id_delete',type=str,help="provide the task_id to delete task")
 # The default functiob to call
-delete_praser.set_defaults(func=_delete)'''
+delete_praser.set_defaults(func=_delete)
 
 # Parse the arguments 
 args = parser.parse_args()

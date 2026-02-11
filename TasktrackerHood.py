@@ -3,10 +3,8 @@ import json
 import shelve
 import os
 
-
 # Global variables
 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
 
 # Assign of task_ids to each task, never repeat an id. 
 def assign_id():
@@ -86,27 +84,41 @@ class Task:
     
 # Update task description of specific task in the list of task dictionaries.
 def update_task_description(task_id,updated_description):
-    _ID_= next(iter(read_json()[return_index(task_id)]))
-    nested_dictionary = read_json()[return_index(task_id)].get(_ID_)
-    _taskObject = Task(_id_=_ID_,
-                        task_placeholder=updated_description,
-                        status=nested_dictionary['status'],
-                        time_of_creation=nested_dictionary['create time'],
-                        time_of_update= time_now)
-    updated_task = _taskObject.construct_task()
-    task_history = read_json()
-    task_history[return_index(task_id)] = updated_task
-    write_json(task_history)
-    print(updated_task)
+    if return_index(task_id) == int:
+        _ID_= next(iter(read_json()[return_index(task_id)]))
+        nested_dictionary = read_json()[return_index(task_id)].get(_ID_)
+        _taskObject = Task(_id_=_ID_,
+                            task_placeholder=updated_description,
+                            status=nested_dictionary['status'],
+                            time_of_creation=nested_dictionary['create time'],
+                            time_of_update= time_now)
+        updated_task = _taskObject.construct_task()
+        task_history = read_json()
+        task_history[return_index(task_id)] = updated_task
+        write_json(task_history)
+        print(updated_task)
+    elif return_index(task_id) == str:
+        print(return_index(task_id))
+        
+    else: 
+        print("Oops what went wrong!")
 
-    
     '''updatetime_of_task = nested_dictionary['update time']
        short_description = nested_dictionary['task description']'''
     
     
-def delete_task(number):
-    pass
-    
+def delete_task(task_id):
+    if return_index(task_id) == int:
+        tasks_json = read_json()
+        del tasks_json[return_index(task_id)]
+        write_json(tasks_json)
+        print("the task")
+        pass
+    elif return_index(task_id) == str:
+        print(return_index(task_id))
+    else:
+        print("Oops what went wrong!")
+        
 def Update_status(task_status):
     pass
     
