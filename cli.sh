@@ -1,20 +1,21 @@
-cli
+# SIMPLE DEMO 
+
+TASK-TRACKER 
 # Adding a new task
-task-cli add "Buy groceries"
-# Output: Task added successfully (ID: 1)
+Task-Tracker.py add "Buy groceries"
+# Output: TASK SUCCESSFULLY SAVED AS ID: 1
 
 # Updating and deleting tasks
-task-cli update 1 "Buy groceries and cook dinner"
-task-cli delete 1
+Task-Tracker.py update "Buy groceries and cook dinner" 1
+Task-Tracker.py delete 1
 
 # Marking a task as in progress or done
-task-cli mark-in-progress 1
-task-cli mark-done 1
+Task-Tracker.py mark-in-progress 1
+Task-Tracker.py mark-done 1
 
 # Listing all tasks
-task-cli list
+Task-Tracker.py list
 
 # Listing tasks by status
-task-cli list done
-task-cli list todo
-task-cli list in-progress
+Task-Tracker.py list done
+Task-Tracker.py list in-progress

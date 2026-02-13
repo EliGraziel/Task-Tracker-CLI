@@ -86,7 +86,7 @@ class Task:
             write_json(self.construct_task())
         else:
             write_json(Add_to_list(self.construct_task()))
-        print(self.construct_task())
+        #print(self.construct_task())
         print(f"TASK SUCCESSFULLY SAVED AS ID:{self.task_id}")
                 
 # Update task description of specific task in the list of task dictionaries.
@@ -103,7 +103,8 @@ def update_task_description(task_id,updated_description):
         task_history = read_json()
         task_history[return_index(task_id)] = updated_task[0]
         write_json(task_history)
-        print(updated_task[0])
+        #print(updated_task[0])
+        print(f'Task:{nested_dictionary['task description']} updated to --> {updated_description}')
         
     elif isinstance(return_index(task_id),str):
         print(f'id provided: {task_id}|data type: {type(task_id)}')
@@ -111,9 +112,6 @@ def update_task_description(task_id,updated_description):
         
     else: 
         print(f"Oops what went wrong!:\nDetails\nargument datatype :{type(task_id)}\nindex datatype: {type(return_index(task_id))}\nindex: {return_index(task_id)}")
-
-    '''updatetime_of_task = nested_dictionary['update time']
-       short_description = nested_dictionary['task description']'''
     
 # Delete a task from list of the tasks, provide the task_id.
 def delete_task(task_id):
@@ -145,7 +143,8 @@ def Update_status(task_status,task_id):
         task_hist = read_json()
         task_hist[return_index(task_id)] = changedstatus[0]
         write_json(task_hist)
-        print(changedstatus[0])
+        print(f'Task:{nested_['task description']} status updated to : {task_status} ')
+        #print(changedstatus[0])
 
     elif isinstance(return_index(task_id),str):
         print(f'id provided: {task_id}|data type: {type(task_id)}')
@@ -161,7 +160,7 @@ def list_done():
         taskidentity = next(iter(read_json()[index]))
         nested_details = read_json()[index].get(taskidentity)
         taskdescription = nested_details['task description']
-        print(f'ID:{taskidentity}|Task:{taskdescription}')
+        print(f'ID:{taskidentity}      |     Task:{taskdescription}')
     
 # list all tasks, whose status is in progress! 
 def list_in_progress():
@@ -170,7 +169,7 @@ def list_in_progress():
         taskidentity = next(iter(read_json()[index]))
         nested_details = read_json()[index].get(taskidentity)
         taskdescription = nested_details['task description']
-        print(f'ID:{taskidentity}|Task:{taskdescription}')
+        print(f'ID:{taskidentity}    |      Task:{taskdescription}')
     
 # list all tasks, whose status is in progress! 
 def list_not_started():
@@ -179,7 +178,7 @@ def list_not_started():
         taskidentity = next(iter(read_json()[index]))
         nested_details = read_json()[index].get(taskidentity)
         taskdescription = nested_details['task description']
-        print(f'ID:{taskidentity}|Task:{taskdescription}')
+        print(f'ID:{taskidentity}     |     Task:{taskdescription}')
 
 # list all tasks    
 def list_all():
@@ -188,7 +187,7 @@ def list_all():
         taskidentity = next(iter(tas_dic))
         nested_details = tas_dic.get(taskidentity)
         taskdescription = nested_details['task description']
-        print(f'ID:{taskidentity}|Task:{taskdescription}')
+        print(f'ID:{taskidentity}      |          Task:{taskdescription}')
 
 
 
