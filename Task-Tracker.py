@@ -19,18 +19,16 @@ def _inprogress(args):
 def _done(args):
     Update_status('done',args.id_done)
 
-def _listall(args):
-    list_all()
-
-def _listinprogress(args):
-    list_in_progress()
-
-def _listnotstarted(args):
-    list_not_started()
-
-def _listdone(args):
-    list_done()
-
+def _listbasedonstatus(args):
+    if args.choice == 'not-started':
+        list_not_started()
+    if args.choice == 'done':
+        list_done()
+    if args.choice == 'in-progress':
+        list_in_progress()
+    if args.choice == None:
+        list_all()
+        
 # Parser    
 parser = argparse.ArgumentParser(prog='Task-Tracker-CLI',
 description="A simple command line interface (CLI) to track what you need to do, what you have done, and what you are currently working on")
@@ -68,24 +66,10 @@ markdone_praser.add_argument('id_done',type=str,help="provide task id to update 
 markdone_praser.set_defaults(func=_done)
 
 # Sub_parser list Command
-listall_praser = sub_parser.add_parser("list",help="change status of Task to in progress in the Task tracker memory")
+listbasedon_praser = sub_parser.add_parser("list",help="List all tasks,of based based on status in the Task tracker memory\n Arguments not-started,done,in-progress")
+listbasedon_praser.add_argument('choice',nargs='?',default=None,choices=('not-started','done','in-progress'),help="List all tasks based status in the Task tracker memory")
 # The default function to call
-listall_praser.set_defaults(func=_listall)
-
-# Sub_parser list not-started Command
-listnotstarted_praser = sub_parser.add_parser("list not-started",help="List all tasks whose status is in-progress in the Task tracker memory")
-# The default function to call
-listnotstarted_praser.set_defaults(func=_listnotstarted)
-
-# Sub_parser list in-progress Command
-listinprogress_praser = sub_parser.add_parser("list in-progress",help="change status of Task to in progress in the Task tracker memory")
-# The default function to call
-listinprogress_praser.set_defaults(func=_listinprogress)
-
-# Sub_parser list done Command
-listdone_praser = sub_parser.add_parser("list done",help="change status of Task to in progress in the Task tracker memory")
-# The default function to call
-listdone_praser.set_defaults(func=_listdone)
+listbasedon_praser.set_defaults(func=_listbasedonstatus)
 
 # Parse the arguments 
 args = parser.parse_args()

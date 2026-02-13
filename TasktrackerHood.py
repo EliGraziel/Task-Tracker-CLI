@@ -47,6 +47,7 @@ def return_index(id_provided):
     if id_provided not in collect:
         return 'Bro, the ID you provided was not found! :('
 
+# Provide the indices of the task dictionaries required for other functions.
 def return_indices(status_queried):
     list_indices = []
     for index, tas_dic in enumerate(read_json()):
@@ -100,11 +101,12 @@ def update_task_description(task_id,updated_description):
                             time_of_update= time_now)
         updated_task = _taskObject.construct_task()
         task_history = read_json()
-        task_history[return_index(task_id)] = updated_task
+        task_history[return_index(task_id)] = updated_task[0]
         write_json(task_history)
-        print(updated_task)
+        print(updated_task[0])
         
-    elif isinstance(return_index(task_id,str)):
+    elif isinstance(return_index(task_id),str):
+        print(f'id provided: {task_id}|data type: {type(task_id)}')
         print(return_index(task_id))
         
     else: 
@@ -115,14 +117,15 @@ def update_task_description(task_id,updated_description):
     
 # Delete a task from list of the tasks, provide the task_id.
 def delete_task(task_id):
-    if isinstance(return_index(task_id,int)):
+    if isinstance(return_index(task_id),int):
         _idtask= next(iter(read_json()[return_index(task_id)]))
         nested_dictionary = read_json()[return_index(task_id)].get(_idtask)
         tasks_json = read_json()
         del tasks_json[return_index(task_id)]
         write_json(tasks_json)
         print(f"The task:{nested_dictionary['task description']} has been successfully deleted!")
-    elif isinstance(return_index(task_id,str)):
+    elif isinstance(return_index(task_id),str):
+        print(f'id provided: {task_id}|data type: {type(task_id)}')
         print(return_index(task_id))
         
     else:
@@ -140,11 +143,12 @@ def Update_status(task_status,task_id):
                             time_of_update= nested_['update time'])
         changedstatus = _taskOb.construct_task()
         task_hist = read_json()
-        task_hist[return_index(task_id)] = changedstatus
+        task_hist[return_index(task_id)] = changedstatus[0]
         write_json(task_hist)
-        print(changedstatus)
+        print(changedstatus[0])
 
-    elif isinstance(return_index(task_id,str)):
+    elif isinstance(return_index(task_id),str):
+        print(f'id provided: {task_id}|data type: {type(task_id)}')
         print(return_index(task_id))
         
     else:
@@ -161,8 +165,8 @@ def list_done():
     
 # list all tasks, whose status is in progress! 
 def list_in_progress():
-    indices_done = return_indices('in-progress')
-    for index in indices_done:
+    indices_in_progress = return_indices('in-progress')
+    for index in indices_in_progress:
         taskidentity = next(iter(read_json()[index]))
         nested_details = read_json()[index].get(taskidentity)
         taskdescription = nested_details['task description']
@@ -170,8 +174,8 @@ def list_in_progress():
     
 # list all tasks, whose status is in progress! 
 def list_not_started():
-    indices_done = return_indices('not-started')
-    for index in indices_done:
+    indices_not_started = return_indices('not-started')
+    for index in indices_not_started:
         taskidentity = next(iter(read_json()[index]))
         nested_details = read_json()[index].get(taskidentity)
         taskdescription = nested_details['task description']
@@ -179,16 +183,18 @@ def list_not_started():
 
 # list all tasks    
 def list_all():
-    for index, tas_dic in enumerate(read_json()):
+    nev = read_json()
+    for tas_dic in nev:
         taskidentity = next(iter(tas_dic))
-        nested_details = tas_dic[index].get(taskidentity)
+        nested_details = tas_dic.get(taskidentity)
         taskdescription = nested_details['task description']
         print(f'ID:{taskidentity}|Task:{taskdescription}')
-    
-# list of all tasks as is: dictionaries: read_json()
-# replace the task if there is gonna be a change of the status of the task or change of the task description at that index in the list.
-# for property of the task, we looking for, say status (done,in progress, not started, then return the indices in a list)
-# list of those indices then we gonna access the contents then show them (for  LOOP)
+
+
+
+# ================================================================================= THE END ===================================================================================
+# CREDITS:  Eli_Graziel 
+# This was not vibe coded, all code here was written from scratch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
