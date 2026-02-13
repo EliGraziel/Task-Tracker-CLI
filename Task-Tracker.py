@@ -1,7 +1,7 @@
 # CLI structure to handle user inputs.
 
 import argparse
-from TasktrackerHood import Task,update_task_description,delete_task
+from TasktrackerHood import Task,update_task_description,delete_task,Update_status,list_done,list_in_progress,list_not_started,list_all
 
 def _task(args):
     Object = Task(task_placeholder=args.task_description)
@@ -11,7 +11,25 @@ def _update(args):
     update_task_description(task_id=args._id_update,updated_description=args.updated_description)
     
 def _delete(args):
-    delete_task(task_num=args._id_delete)
+    delete_task(args._id_delete)
+    
+def _inprogress(args):
+    Update_status('in-progress',args.id_mark)
+
+def _done(args):
+    Update_status('done',args.id_done)
+
+def _listall(args):
+    list_all()
+
+def _listinprogress(args):
+    list_in_progress()
+
+def _listnotstarted(args):
+    list_not_started()
+
+def _listdone(args):
+    list_done()
 
 # Parser    
 parser = argparse.ArgumentParser(prog='Task-Tracker-CLI',
@@ -34,8 +52,40 @@ update_praser.set_defaults(func=_update)
 #Sub_parser Delete Command
 delete_praser = sub_parser.add_parser("delete",help="Deletes Task Description to Task tracker memory")
 delete_praser.add_argument('_id_delete',type=str,help="provide the task_id to delete task")
-# The default functiob to call
+# The default function to call
 delete_praser.set_defaults(func=_delete)
+
+# Sub_parser mark-in-progress Command
+markinprogress_praser = sub_parser.add_parser("mark-in-progress",help="change status of Task to in progress in the Task tracker memory")
+markinprogress_praser.add_argument('id_mark',type=str,help="provide task id to update status of the task")
+# The default function to call
+markinprogress_praser.set_defaults(func=_inprogress)
+
+# Sub_parser mark-done Command
+markdone_praser = sub_parser.add_parser("mark-done",help="change status of Task to done in the Task tracker memory")
+markdone_praser.add_argument('id_done',type=str,help="provide task id to update status of the task")
+# The default function to call
+markdone_praser.set_defaults(func=_done)
+
+# Sub_parser list Command
+listall_praser = sub_parser.add_parser("list",help="change status of Task to in progress in the Task tracker memory")
+# The default function to call
+listall_praser.set_defaults(func=_listall)
+
+# Sub_parser list not-started Command
+listnotstarted_praser = sub_parser.add_parser("list not-started",help="List all tasks whose status is in-progress in the Task tracker memory")
+# The default function to call
+listnotstarted_praser.set_defaults(func=_listnotstarted)
+
+# Sub_parser list in-progress Command
+listinprogress_praser = sub_parser.add_parser("list in-progress",help="change status of Task to in progress in the Task tracker memory")
+# The default function to call
+listinprogress_praser.set_defaults(func=_listinprogress)
+
+# Sub_parser list done Command
+listdone_praser = sub_parser.add_parser("list done",help="change status of Task to in progress in the Task tracker memory")
+# The default function to call
+listdone_praser.set_defaults(func=_listdone)
 
 # Parse the arguments 
 args = parser.parse_args()
